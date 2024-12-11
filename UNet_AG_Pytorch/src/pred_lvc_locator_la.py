@@ -17,9 +17,7 @@ SEED = 10
 
 MODEL_DIR = './lvc-locator-output-la/'
 DATA_DIR = './ds/'
-# DATA_DIR = './augmented-ds/'
-# DATA_DIR = '../prob_mri_segmentation/ds/'
-# DATA_DIR = '../acdc/augmented-ds/'
+
 HEIGHT = 256
 WIDTH = 256
 N_CHANNELS = 1
@@ -125,19 +123,6 @@ for val_set in range(1, 2):
             y = val_ds['labels'].unsqueeze(0).to(device)
 
             y_pred = model(X)
-
-            # print('#### y_pred', y_pred.shape)
-            # tensor = y_pred.squeeze(0)
-
-            # for k in range(tensor.shape[0]):
-            #     # Convert to numpy array and scale to [0, 255]
-            #     img_array = tensor[k].cpu().detach().numpy() 
-            #     img_array = img_array * 255  
-            #     img_array = img_array.astype(np.uint8) 
-
-            #     # Create a PIL Image and save it
-            #     img = Image.fromarray(img_array, mode='L')
-            #     img.save(f'./PRED/{pat}_channel_{i}_{k}.png')
 
             X_stack[i] = X[0].cpu()
             y_stack[i] = y[0].cpu()

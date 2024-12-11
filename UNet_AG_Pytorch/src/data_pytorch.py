@@ -29,13 +29,6 @@ class DataGenerator(Dataset):
         self.epoch_count = 0
         self.on_epoch_end()
 
-        # Transformation to resize and normalize images
-        # self.transform = transforms.Compose([
-        #     transforms.ToTensor(),  # Convert PIL Image or numpy.ndarray to tensor
-        #     transforms.Lambda(lambda x: (x * 2) - 1),  # Normalize to [-1, 1]
-        #     transforms.Lambda(lambda x: x[:1, :, :])  # Select the first channel
-        # ])
-
     def __len__(self):
         return len(self.dataset)
 

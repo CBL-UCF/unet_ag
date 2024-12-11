@@ -16,7 +16,7 @@ SEED = 10
 SRC_MODEL_DIR = './weights/la-weights/locator'
 MODEL_DIR = './lvc-locator-output-la/'
 DATA_DIR = './ds/'
-# DATA_DIR = '../acdc/augmented-ds/'
+
 HEIGHT = 352
 WIDTH = 352
 N_CHANNELS = 1
@@ -46,16 +46,8 @@ def generate_fold(VAL_SET):
     if VAL_SET < 1 or VAL_SET > 8:
         raise ValueError("VAL_SET must be between 1 and 8")
 
-    # Define the two groups of patients
-
-
-
-    ### convert this to be string with a 0 on the beginning
     patients_group_1 = np.arange(10, 19)  # Patients 10 to 18
     patients_group_2 = np.arange(65, 73)  # Patients 65 to 73
-    # patients_group_2 = np.array([1404, 1406, 1434, 1445, 1446, 1492, 1493])  # The numbered patients
-
-
 
     # Determine validation patients for each fold
     if VAL_SET <= 7:
@@ -179,9 +171,7 @@ for epoch in range(EPOCHS):
     for i_batch, sample_batched in enumerate(dataloader):
         inputs, labels = sample_batched['inputs'].to(device), sample_batched['labels'].to(device)
         optimizer.zero_grad()
-        # print_input(inputs, i_batch)
         outputs = model(inputs)
-        # print_output(outputs, i_batch)
         loss = cce_dice_loss(outputs, labels)
         loss.backward()
         optimizer.step()

@@ -8,31 +8,9 @@ import numpy as np
 
 def dice_coeff(y_true, y_pred):
     smooth = 1
-
-    # for frame in range(y_true.shape[0]):
-    #     slice_data_y_true = y_true[frame, -1:, :, :]
-    #     slice_data_y_pred = y_pred[frame, -1:, :, :]
-
-    #     data_img = slice_data_y_true.squeeze(0).detach().cpu().numpy()
-    #     data_pred = slice_data_y_pred.squeeze(0).detach().cpu().numpy()
-
-    #     img_converted = ((data_img) * 255.).astype(np.uint8)
-    #     img_converted_pred = ((data_pred) * 255.).astype(np.uint8)
-
-    #     numpy_array = img_converted.detach().cpu().numpy().astype(np.uint8)
-    #     image = Image.fromarray(img_converted)
-    #     image_pred = Image.fromarray(img_converted_pred)
-
-    #     png_file_path = os.path.join('./ResultsHeartLocator/loss', f"y_true_frame{frame}_lvc.png")
-    #     png_file_path_pred = os.path.join('./ResultsHeartLocator/loss', f"y_pred_frame{frame}_background.png")
-
-    #     image.save(png_file_path)
-    #     image_pred.save(png_file_path_pred)
-
     # Flatten
     y_true_f = torch.reshape(y_true,(-1,))
     y_pred_f = torch.reshape(y_pred,(-1,))
-
     intersection = (y_true_f * y_pred_f).sum()
     score = (2.0 * intersection + smooth) / (y_true_f.sum() + y_pred_f.sum() + smooth)
     return score
@@ -54,8 +32,8 @@ def cce_dice_loss(y_true, y_pred):
 
 
 def get_unet_ag_loss(batch_size):
-    def unet_ag_loss(y_true, y_pred):
-        unet_loss = cce_dice_loss(y_true, y_pred)
-        spline_loss = dice_loss(y_true, y_pred)
-        return unet_loss + spline_loss
+    def unet_ag_loss(y_true, y_pred, alpha=1.0, beta=1.0):
+        unet_loss = cce_dice_loss(y_true, y_pred[:batch_size])
+        spline_loss = dice_loss(y_true, y_pred[batch_size:])
+        return alpha * unet_loss + beta * spline_loss
     return unet_ag_loss

@@ -1,14 +1,12 @@
 import torch
 import torch.nn as nn
-from torchvision import models
-from torch.nn.functional import relu
+import torch.nn.functional as F
 
 def double_convolutional_layer(n_input_channels, base_n_filters, kernel_size, padding, kernel_initializer):
-    # print('n_input_channels, base_n_filters, kernel_size, padding', n_input_channels, base_n_filters, kernel_size, padding)
     return nn.Sequential(
-        nn.Conv2d(in_channels=n_input_channels,out_channels=base_n_filters, kernel_size=kernel_size,padding=padding),
+        nn.Conv2d(in_channels=n_input_channels,out_channels=base_n_filters, kernel_size=kernel_size,padding=padding, bias=False),
         nn.BatchNorm2d(base_n_filters),
-        nn.Conv2d(in_channels=base_n_filters,out_channels=base_n_filters, kernel_size=kernel_size,padding=padding),
+        nn.Conv2d(in_channels=base_n_filters,out_channels=base_n_filters, kernel_size=kernel_size,padding=padding, bias=False),
         nn.BatchNorm2d(base_n_filters),
         nn.ReLU(inplace=True)
     )
@@ -107,8 +105,8 @@ class UNet(nn.Module):
         seg_layer = self.output_segmentation2(ds1_ds2_sum_upscale_ds3_sum_upscale)
 
         if not self.seg:
-            output = nn.Softmax(dim=1)(seg_layer)
+            output = F.softmax(seg_layer, dim=1)
         else:
-            output = torch.sigmoid()(seg_layer)
+            output = torch.sigmoid(seg_layer)
 
         return output

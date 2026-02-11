@@ -6,3 +6,4 @@ Weights for the lvc-locator, lvc-unet-ag, and lvm-unet-ag models can be download
 
 For the interested reader, the ACDC dataset used for training, testing, and validation is available at: https://www.creatis.insa-lyon.fr/Challenge/acdc/
 
+A test Pytorch version is available as a branch
